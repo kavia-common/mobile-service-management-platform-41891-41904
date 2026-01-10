@@ -44,7 +44,7 @@ async function request(path, { method = 'GET', body, auth = false } = {}) {
 // PUBLIC_INTERFACE
 export const api = {
   /** REST calls used by the app UI. */
-  health: () => request('/'),
+  health: () => request('/health'),
   seed: () => request('/api/dev/seed'),
   listServices: () => request('/api/services'),
   getService: (id) => request(`/api/services/${id}`),
