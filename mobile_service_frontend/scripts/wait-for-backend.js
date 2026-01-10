@@ -8,9 +8,21 @@
 
 const { URL } = require('url');
 
+function _healthcheckDisabled() {
+  /** Return true if BACKEND_HEALTHCHECK_DISABLED is enabled (shared toggle with backend). */
+  return String(process.env.BACKEND_HEALTHCHECK_DISABLED || 'false').trim().toLowerCase() === 'true' ||
+    String(process.env.BACKEND_HEALTHCHECK_DISABLED || 'false').trim() === '1' ||
+    String(process.env.BACKEND_HEALTHCHECK_DISABLED || 'false').trim().toLowerCase() === 'yes';
+}
+
 // PUBLIC_INTERFACE
 async function waitForBackendHealth() {
   /** Wait for backend /health to return HTTP 200, or timeout with a warning. */
+  if (_healthcheckDisabled()) {
+    console.log('[wait-for-backend] BACKEND_HEALTHCHECK_DISABLED=true; skipping backend health polling.');
+    return true;
+  }
+
   const base = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
   const healthUrl = new URL('/health', base).toString();
 

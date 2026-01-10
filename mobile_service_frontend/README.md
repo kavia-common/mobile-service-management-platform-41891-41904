@@ -9,13 +9,18 @@ This project provides a minimal React template with a clean, modern UI and minim
 - **Fast**: Minimal dependencies for quick loading times
 - **Simple**: Easy to understand and modify
 
-## Getting Started
+## Getting Started (backend-first)
 
-In the project directory, you can run:
+Start the backend first (default SQLite), then start the frontend.
+
+### Environment variables
+- `REACT_APP_API_BASE_URL` (default `http://localhost:3001`)
+- `BACKEND_HEALTHCHECK_DISABLED` (default `false`)
+  - When `true`, the wait script will skip polling and the UI will start immediately.
 
 ### `npm start`
 
-Runs the app in development mode.\
+Runs the app in development mode **after waiting for the backend health endpoint** (`/health`).\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ### `npm test`
