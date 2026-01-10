@@ -8,11 +8,23 @@
 
 const { URL } = require('url');
 
+function _truthy(value) {
+  return String(value || 'false').trim().toLowerCase() === 'true' ||
+    String(value || 'false').trim() === '1' ||
+    String(value || 'false').trim().toLowerCase() === 'yes';
+}
+
 function _healthcheckDisabled() {
-  /** Return true if BACKEND_HEALTHCHECK_DISABLED is enabled (shared toggle with backend). */
-  return String(process.env.BACKEND_HEALTHCHECK_DISABLED || 'false').trim().toLowerCase() === 'true' ||
-    String(process.env.BACKEND_HEALTHCHECK_DISABLED || 'false').trim() === '1' ||
-    String(process.env.BACKEND_HEALTHCHECK_DISABLED || 'false').trim().toLowerCase() === 'yes';
+  /**
+   * Return true if backend health checks are disabled.
+   *
+   * Supports both the shared backend toggle and CRA-prefixed variants that may be injected by preview env.
+   */
+  return (
+    _truthy(process.env.BACKEND_HEALTHCHECK_DISABLED) ||
+    _truthy(process.env.REACT_APP_BACKEND_HEALTHCHECK_DISABLED) ||
+    _truthy(process.env.REACT_APP_HEALTHCHECK_DISABLED)
+  );
 }
 
 // PUBLIC_INTERFACE
